@@ -1,11 +1,14 @@
 package utils
 
-import "os"
+import (
+	"os"
 
-func GetDBConfig() (string, string, string, string) {
-	host := os.Getenv("POSTGRES_HOSTNAME")
-	database := os.Getenv("POSTGRES_DB")
-	user := os.Getenv("POSTGRES_USER")
-	password := os.Getenv("POSTGRES_PASSWORD")
-	return host, database, user, password
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
+
+func GetDBConnection() (*gorm.DB, error) {
+	url := os.Getenv("POSTGRES_URL")
+	db, err := gorm.Open(postgres.Open(url), &gorm.Config{})
+	return db, err
 }
