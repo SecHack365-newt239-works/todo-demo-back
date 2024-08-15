@@ -26,12 +26,12 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.CORS())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"http://localhost:5173", os.Getenv("FRONTEND_URL")},
+		AllowOrigins: []string{"http://localhost:8000", os.Getenv("FRONTEND_URL")},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
 	e.GET("/", Hello())
-	e.GET("/todo", todo.GetTodoByID())
+	e.GET("/todo", todo.GetTodo())
 	e.POST("/todo", todo.CreateTodo())
-	e.PUT("/todo/:id", todo.UpdateTodoDone())
+	e.PUT("/todo/:id", todo.DeleteTodo())
 	e.Logger.Fatal(e.Start(":1323"))
 }

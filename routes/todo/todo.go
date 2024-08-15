@@ -45,32 +45,28 @@ func CreateTodo() echo.HandlerFunc {
 	}
 }
 
-func GetTodoByID() echo.HandlerFunc {
+func GetTodo() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		db, err := utils.GetDBConnection()
 		if err != nil {
 			fmt.Printf("Error getting DB connection: %v\n", err)
 		}
-		id := c.Param("id")
-		var todo Todo
-		db.First(&todo, "id = ?", id)
-		return c.JSON(http.StatusOK, todo)
+		var todos []Todo
+		db.Where("done = false").Find(&todos)
+		fmt.Printf("todos: %v\n", todos)
+		return c.JSON(http.StatusOK, todos)
 	}
 }
 
-func UpdateTodoDone() echo.HandlerFunc {
+func DeleteTodo() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		db, err := utils.GetDBConnection()
 		if err != nil {
 			fmt.Printf("Error getting DB connection: %v\n", err)
 		}
 		id := c.Param("id")
-		status := c.QueryParam("status")
-		if status == "true" {
-			db.Model(&Todo{}).Where("id = ?", id).Update("Done", true)
-		} else {
-			db.Model(&Todo{}).Where("id = ?", id).Update("Done", false)
-		}
+		db.Model(&Todo{}).Where("id = ?", id).Update("done", true)
+
 		return c.NoContent(http.StatusOK)
 	}
 }
