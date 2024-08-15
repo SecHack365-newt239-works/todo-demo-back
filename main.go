@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"todo-demo-back/routes/todo"
 
 	"github.com/joho/godotenv"
@@ -25,7 +26,7 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.CORS())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"http://localhost:5173"},
+		AllowOrigins: []string{"http://localhost:5173", os.Getenv("FRONTEND_URL")},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
 	e.GET("/", Hello())
