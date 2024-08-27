@@ -53,7 +53,6 @@ func GetTodo() echo.HandlerFunc {
 		}
 		var todos []Todo
 		db.Where("done = false").Find(&todos)
-		fmt.Printf("todos: %v\n", todos)
 		return c.JSON(http.StatusOK, todos)
 	}
 }
