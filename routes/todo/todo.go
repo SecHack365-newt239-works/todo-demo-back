@@ -10,16 +10,14 @@ import (
 )
 
 type Todo struct {
-	ID        int `gorm:"primaryKey;size:255;default:uuid_generate_v4()"`
-	Label     string
-	Timestamp time.Time
-	Done      bool
-}
-
-type createTodoParam struct {
+	ID        int       `gorm:"primaryKey;size:255;default:uuid_generate_v4()" json:"id"`
 	Label     string    `json:"label"`
 	Timestamp time.Time `json:"timestamp"`
 	Done      bool      `json:"done"`
+}
+
+type createTodoParam struct {
+	label string
 }
 
 type responseParam struct {
@@ -36,7 +34,7 @@ func CreateTodo() echo.HandlerFunc {
 		if err != nil {
 			fmt.Printf("Error getting DB connection: %v\n", err)
 		}
-		newTodo := Todo{Label: createTodoParam.Label, Timestamp: time.Now(), Done: false}
+		newTodo := Todo{Label: createTodoParam.label, Timestamp: time.Now(), Done: false}
 		result := db.Create(&newTodo)
 		if result.Error != nil {
 			fmt.Printf("Error creating user: %v\n", result.Error)
